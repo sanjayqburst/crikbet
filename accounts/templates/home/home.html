@@ -1,0 +1,7 @@
+<h1>Home</h1>
+{% if message %}
+<script>
+    window.alert('{{message}}');
+</script>
+{% endif %}
+<a href="{% url 'logout' %}"><button type="submit">signout</button></a>
