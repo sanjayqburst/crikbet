@@ -40,7 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'accounts.apps.AccountsConfig',
-    'core.apps.CoreConfig',
+    'match',
+    'matchplayer',
+    'player',
+    'team',
+    'usermatch',
+    'usermatchplayer',
 ]
 
 MIDDLEWARE = [
