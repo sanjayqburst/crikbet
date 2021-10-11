@@ -19,5 +19,6 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
     path('accounts/',include('django.contrib.auth.urls')),
-    path('',include('accounts.urls'))
+    path('',include('accounts.urls')),
+    path('api/v1/',include('crikbet.apiv1urls'))
 ]

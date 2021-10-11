@@ -12,4 +12,4 @@ class MatchPlayer(models.Model):
     points=models.IntegerField()
 
     def __str__(self):
-        return 'score of '+self.player_id.player_name+' for the '+self.match_id.match_name+' is '+ str(self.points)
+        return 'Point of '+self.player_id.player_name+' for the '+self.match_id.match_name+' is '+ str(self.points)
