@@ -6,7 +6,9 @@ from .serializers import UserMatchSerializer
 
 
 class UserMatchView(APIView):
-    
+    """ 
+    Method for handling GET and POST request of user match model.
+    """
     def get(self,request):
         usermatch=UserMatches.objects.all()
         serializer=UserMatchSerializer(usermatch,many=True)

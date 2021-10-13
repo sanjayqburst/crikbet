@@ -5,6 +5,9 @@ from .models import UserMatches
 
 
 class UserMatchSerializer(serializers.ModelSerializer):
+    """ 
+    Serializer for handling User match view requests.
+    """
     class Meta:
         model=UserMatches
         fields="__all__"

@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import views as views_auth
 import datetime
 from match.models import Matches
+from matchplayer.models import MatchPlayer
 from player.models import Players
 from usermatch.models import UserMatches
 from usermatchplayer.models import UserMatchPlayer
@@ -35,18 +36,24 @@ class HomeView(LoginRequiredMixin,TemplateView):
     time_now=datetime.datetime.now()
     match_with_time=Matches.objects.filter(match_time__gte=time_now)
     user_match=UserMatches.objects
-    extra_context={'matches':matches,'user_matches':user_match,'time_now':match_with_time}
+    match_show=Matches.objects.filter(match_time__lte=time_now)
+    points=MatchPlayer.objects
+    extra_context={'matches':matches,'user_matches':user_match,'time_now':match_with_time,'match_over':match_show}
     template_name='home/home.html'
 
 
 class AddTeamView(LoginRequiredMixin,CreateView):
+    """
+    View for Joining new match by user. 
+    """
     template_name='addteam/addteam.html'
     model=UserMatchPlayer
     fields='__all__'
-    lookup_url_kwarg='match_id'
+    # lookup_url_kwarg='match_id'
+    usermatch=UserMatches.objects
     player=Players.objects
     matches=Matches.objects
-    extra_context={'players':player,'matches':matches,'idd':lookup_url_kwarg}
+    extra_context={'players':player,'matches':matches,'usermatch':usermatch}
     
 
     
@@ -55,12 +62,21 @@ class AddTeamView(LoginRequiredMixin,CreateView):
 class RegisterView(SuccessMessageMixin,CreateView):
     """
     Method to create new user
-
-    Params:
-        CreateView View: Creates view for user registration.
     """
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('home')
     form_class = RegisterUserForm    
     success_message = "Your profile was created successfully. Pleapy    se login to continue."
 
+class SelectPlayerView(SuccessMessageMixin,CreateView):
+    """
+    Method for selecting players for user 
+    """
+    matches=Matches.objects
+    player=Players.objects
+    usermatch=UserMatches.objects
+    model=UserMatchPlayer
+    fields='__all__'
+    extra_context={'players':player,'matches':matches,"usermatch":usermatch}
+    template_name='selectplayer/selectplayer.html'
+    success_url=reverse_lazy('home')

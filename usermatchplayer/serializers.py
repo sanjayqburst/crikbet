@@ -5,6 +5,9 @@ from .models import UserMatchPlayer
 
 
 class UserMatchPlayerSerializer(serializers.ModelSerializer):
+    """
+    Serializer for handling UserMatchPlayer View.
+    """
     class Meta:
         model=UserMatchPlayer
         fields="__all__"

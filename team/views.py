@@ -5,7 +5,9 @@ from team.serializers import TeamSerializer
 from .models import Teams
 # Create your views here.
 class TeamView(APIView):
-
+    """ 
+    Method for handling API view for team.
+    """
     def get(self,request):
         teams=Teams.objects.all()
         serializers=TeamSerializer(teams,many=True)

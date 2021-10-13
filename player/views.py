@@ -6,7 +6,9 @@ from rest_framework.views import APIView
 
 # Create your views here.
 class PlayerView(APIView):
-    
+    """ 
+    Method for creation of API view for player information.
+    """
     def get(self,request):
         player=Players.objects.all()
         serializers=PlayerSerializer(player, many=True)

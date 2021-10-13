@@ -5,6 +5,9 @@ from .models import MatchPlayer
 
 
 class MatchPlayerSerializer(serializers.ModelSerializer):
+    """
+    Serialiszer for handling Match player data
+    """
     class Meta:
         model=MatchPlayer
         fields="__all__"

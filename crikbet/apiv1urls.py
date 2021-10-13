@@ -1,4 +1,8 @@
 from django.urls import path,include
+
+
+# Url patterns for API
+
 urlpatterns = [
     path('team/',include('team.v1.urls'),name='teamv1'),
     path('player/',include('player.v1.urls'),name='playerv1'),

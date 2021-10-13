@@ -5,6 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>CrikBet | Join Team</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<link
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
 			rel="stylesheet"
@@ -13,27 +14,107 @@
 		/>
 	</head>
 	<body>
-
+        <div class="px-4 py-5 my-5 text-center">
+            <h1 class="display-5 fw-bold">Match Players</h1>
 
         {%for match in matches.all%}
         {% if match.id == request.GET.id|add:"0" %}
-
-        <h6>{{match.home_team}}</h6>
-        {%for player in players.all%}
-        <p>{{player.team}}</p>
-        {%if player.team == match.home_team%}
-        <p>{{player.player_name}}</p>
+            <h3>{{match.match_name}}</h3>
         {%endif%}
         {%endfor%}
+        {% csrf_token%}
+        <button id="create" class="btn team-join btn-primary btn-lg" type="submit">Click to Join the Game</button>
+
+        <br>
+        <br>
+        <br>
+        <h4>The players</h4>
+        <div class="d-flex justify-content-center  flex-row">
+        {%for match in matches.all%}
+        {% if match.id == request.GET.id|add:"0" %}
+
+       
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+            <span class="fs-5 fw-semibold">{{match.home_team}}</span>
+        {%for player in players.all%}
+        {%if player.team == match.home_team%}
+        <div class="list-group list-group-flush border-bottom scrollarea">
+            <a class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">{{player.player_name}}</strong>
+                </div>
+            </a>
+        </div>
+        {%endif%}   
+        {%endfor%}
+        </div>
+
+
+
+
+        <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 380px;">
+            <span class="fs-5 fw-semibold">{{match.away_team}}</span>
+        {%for player in players.all%}
+        {%if player.team == match.away_team%}
+        <div class="list-group list-group-flush border-bottom scrollarea">
+            <a class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">{{player.player_name}}</strong>
+                </div>
+            </a>
+        </div>
+        {%endif%}   
+        {%endfor%}
+        </div>
 
         {% endif %}
         {%endfor%}
+      
+    </div>
 
 
-        {%for player in players.all%}
+
+    {%for userm in usermatch.all%}
+    {%if userm.user_id.id == user.id%}
+    {%if userm.user_match_id.id == request.GET.id|add:"0"%}
+    <p>{{userm.id}}</p>
+    <input type="hidden" class="usermatch" id="usermatchid" value="{{userm.id}}">
+    {%endif%}
+    {%endif%}
+    {%endfor%}
+    
         
-        <p>{{player.player_name}}</p>
-        {%endfor%}
+
+</div>
+        <script>
+            const valuereq=$("#usermatchid").val();
+
+           
+            $('#create').click(function(){
+                const userid=parseInt('{{user.id}}');
+                const matchid=parseInt(window.location.href.split('id=')[1]);
+                if (valuereq==undefined){
+                    $.ajax({
+                    type:'POST',
+                    url:"{% url 'usermatchview' %}",
+					data:{
+						"user_id": userid,
+                        "user_match_id": matchid,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+                    success:function(data){
+                        window.location.href="{% url 'selectplayer' %}?id="+matchid;
+                    }
+                })
+
+            }
+            else{
+                window.location.href="{% url 'selectplayer' %}?id="+matchid;
+            }
+                    
+            })
+        </script>
+
 		<script
 			src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
 			integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"

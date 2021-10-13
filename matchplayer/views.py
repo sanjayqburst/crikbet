@@ -6,7 +6,9 @@ from .serializers import MatchPlayerSerializer
 # Create your views here.
 
 class MatchPlayerView(APIView):
-    
+    """
+    Method for API call for match palyer selection GET and POST requests. 
+    """
     def get(self,request):
         matchplayer=MatchPlayer.objects.all()
         serializer=MatchPlayerSerializer(matchplayer,many=True)

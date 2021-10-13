@@ -3,6 +3,9 @@ from rest_framework import serializers
 from .models import Players
 
 class PlayerSerializer(serializers.ModelSerializer):
+    """
+    Serializer for handling Player API request and storing the fields.
+    """
     class Meta:
         model=Players
         fields="__all__"
