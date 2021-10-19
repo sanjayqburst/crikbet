@@ -9,7 +9,7 @@ class MatchPlayer(models.Model):
     """
     player_id=models.ForeignKey(Players,on_delete=models.CASCADE,related_name='id_player')
     match_id=models.ForeignKey(Matches,on_delete=models.CASCADE,related_name='id_match')
-    points=models.IntegerField()
+    points=models.IntegerField(default=0)
 
     def __str__(self):
         return 'Point of '+self.player_id.player_name+' for the '+self.match_id.match_name+' is '+ str(self.points)

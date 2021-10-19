@@ -2,6 +2,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from match.serializers import MatchSerializer
 from .models import Matches
+from .services import MatchService
 # Create your views here.
 class MatchView(APIView):
     """
@@ -10,15 +11,20 @@ class MatchView(APIView):
 
     def get(self,request):
         """
-        Handleds get request for match view.
+        Query all the match objects and send as response
+
+        :param request Request object
+        :return : Response JSON data 
         """
-        match=Matches.objects.all()
-        serializer=MatchSerializer(match,many=True)
+        serializer=MatchSerializer(MatchService().get_matches(),many=True)
         return Response(serializer.data)
 
     def post(self,request):
         """
-        Handleds post request for match view.
+        Creates new match object
+
+        :param request: Request Object
+        :return: Response JSON data        
         """
         data=request.data
         serializers=MatchSerializer(data=data)

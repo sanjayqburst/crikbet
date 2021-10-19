@@ -1,5 +1,5 @@
 from django.http.request import HttpHeaders, HttpRequest
-from django.views.generic.base import  TemplateView
+from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -14,11 +14,11 @@ from usermatchplayer.models import UserMatchPlayer
 from .forms import RegisterUserForm
 
 
-class LoginView(SuccessMessageMixin,views_auth.LoginView):
+class LoginView(SuccessMessageMixin, views_auth.LoginView):
     """
     View class for handling Login request:
     """
-    redirect_authenticated_user=True
+    redirect_authenticated_user = True
     success_message = "You were successfully logged in."
 
     def get_success_url(self):
@@ -28,55 +28,57 @@ class LoginView(SuccessMessageMixin,views_auth.LoginView):
         return '/'
 
 
-class HomeView(LoginRequiredMixin,TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     """
     View for rendering home page for users.
     """
-    matches=Matches.objects
-    time_now=datetime.datetime.now()
-    match_with_time=Matches.objects.filter(match_time__gte=time_now)
-    user_match=UserMatches.objects
-    match_show=Matches.objects.filter(match_time__lte=time_now)
-    points=MatchPlayer.objects
-    extra_context={'matches':matches,'user_matches':user_match,'time_now':match_with_time,'match_over':match_show}
-    template_name='home/home.html'
+    matches = Matches.objects
+    usermatchplayer = UserMatchPlayer.objects
+
+    time_now = datetime.datetime.now()
+    match_with_time = Matches.objects.filter(match_time__gte=time_now)
+    user_match = UserMatches.objects
+    match_show = Matches.objects.filter(match_time__lte=time_now)
+    matchplayers = MatchPlayer.objects
+    extra_context = {'matches': matches, 'user_matches': user_match, 'time_now': match_with_time,
+                     'match_over': match_show, 'usermatchplayers': usermatchplayer, 'matchplayers': matchplayers, 'currenttime': time_now}
+    template_name = 'home/home.html'
 
 
-class AddTeamView(LoginRequiredMixin,CreateView):
+class AddTeamView(LoginRequiredMixin, CreateView):
     """
     View for Joining new match by user. 
     """
-    template_name='addteam/addteam.html'
-    model=UserMatchPlayer
-    fields='__all__'
-    # lookup_url_kwarg='match_id'
-    usermatch=UserMatches.objects
-    player=Players.objects
-    matches=Matches.objects
-    extra_context={'players':player,'matches':matches,'usermatch':usermatch}
-    
+    template_name = 'addteam/addteam.html'
+    model = UserMatchPlayer
+    fields = '__all__'
+    usermatch = UserMatches.objects
+    player = Players.objects
+    matches = Matches.objects
+    extra_context = {'players': player,
+                     'matches': matches, 'usermatch': usermatch}
 
-    
-    
 
-class RegisterView(SuccessMessageMixin,CreateView):
+class RegisterView(SuccessMessageMixin, CreateView):
     """
     Method to create new user
     """
     template_name = 'registration/signup.html'
     success_url = reverse_lazy('home')
-    form_class = RegisterUserForm    
+    form_class = RegisterUserForm
     success_message = "Your profile was created successfully. Pleapy    se login to continue."
 
-class SelectPlayerView(SuccessMessageMixin,CreateView):
+
+class SelectPlayerView(SuccessMessageMixin, CreateView):
     """
     Method for selecting players for user 
     """
-    matches=Matches.objects
-    player=Players.objects
-    usermatch=UserMatches.objects
-    model=UserMatchPlayer
-    fields='__all__'
-    extra_context={'players':player,'matches':matches,"usermatch":usermatch}
-    template_name='selectplayer/selectplayer.html'
-    success_url=reverse_lazy('home')
+    matches = Matches.objects
+    player = Players.objects
+    usermatch = UserMatches.objects
+    model = UserMatchPlayer
+    fields = '__all__'
+    extra_context = {'players': player,
+                     'matches': matches, "usermatch": usermatch}
+    template_name = 'selectplayer/selectplayer.html'
+    success_url = reverse_lazy('home')
